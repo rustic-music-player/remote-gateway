@@ -1,0 +1,12 @@
+version: '3'
+services:
+  gateway:
+    build: .
+    image: rustic/remote-gateway:latest
+  proxy:
+    image: traefik:2
+    ports:
+      - 80:80
+      - 443:443
+  kv:
+    image: redis:6

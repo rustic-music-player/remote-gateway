@@ -1,0 +1,29 @@
+[package]
+name = "rustic-remote-gateway"
+version = "0.1.0"
+authors = ["Max Jöhnk <maxjoehnk@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[features]
+default = ["cloudflare"]
+
+[dependencies]
+cloudflare = { version = "0.6", optional = true }
+actix-web = "2"
+actix-rt = "1"
+actix = "0.9"
+async-trait = "0.1"
+log = "0.4"
+failure = "0.1"
+bollard = "0.5"
+lazy_static = "1.4"
+uuid = { version = "0.8", features = ["serde", "v4"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+env_logger = "0.7"
+url = "2.1"
+rand = "0.7"
+redis = "0.15"
+base64 = { version = "0.12", features = [] }
