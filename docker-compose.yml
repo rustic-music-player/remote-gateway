@@ -1,12 +1,54 @@
 version: '3'
 services:
   gateway:
-    build: .
-    image: rustic/remote-gateway:latest
+    build: packages/remote-gateway
+    image: docker.pkg.github.com/rustic-music-player/remote-gateway/gateway:latest
+    networks:
+      - remote_gateway
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - "SSH_PORT=2222"
+      - "PUBLIC_URL=http://${DOMAIN}"
+      - "REDIS_URL=redis://kv"
+      - "CONTAINER_IMAGE=nginx:alpine"
+      - "CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}"
+      - "CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}"
+      - "CLOUDFLARE_ZONE_ID=${CLOUDFLARE_ZONE_ID}"
+      - "CLOUDFLARE_ZONE=${DOMAIN}"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gateway.rule=Host(`${DOMAIN}`)"
   proxy:
-    image: traefik:2
+    build: packages/proxy
+    image: docker.pkg.github.com/rustic-music-player/remote-gateway/proxy:latest
+    networks:
+      - remote_gateway
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 80:80
       - 443:443
+  ssh-proxy:
+    image: farmer1992/sshpiperd
+    volumes:
+      - ssh_tunnels:/var/sshpiper
+    ports:
+      - 2222:2222
+    networks:
+      - remote_gateway
+  ssh-proxy-api:
+    image: docker.pkg.github.com/rustic-music-player/remote-gateway/ssh-proxy-api:latest
+    build: packages/ssh-proxy
+    networks:
+      - remote_gateway
+    volumes:
+    - ssh_tunnels:/var/sshpiper
   kv:
     image: redis:6
+    networks:
+      - remote_gateway
+volumes:
+  ssh_tunnels:
+networks:
+  remote_gateway:

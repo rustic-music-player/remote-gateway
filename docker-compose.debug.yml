@@ -1,0 +1,8 @@
+version: '3'
+services:
+  kv:
+    ports:
+      - 6379:6379
+  proxy:
+    ports:
+      - 8090:8080

@@ -1,8 +1,10 @@
 use async_trait::async_trait;
 mod access_node;
-mod node_creators;
+pub(crate) mod node_creators;
 pub(crate) mod api;
-mod cloudflare_dns;
+#[cfg(feature = "cloudflare")]
+pub(crate) mod cloudflare_dns;
+pub(crate) mod node_store;
 
 #[async_trait]
 pub trait DnsClient {

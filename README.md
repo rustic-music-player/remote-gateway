@@ -24,7 +24,7 @@ POST /api/gateway
 Content-Type: application/json
 ---
 {
-	"public_key": "<public_key base64 encoded>",
+	"public_key": "<public_key>",
 	"preferred_prefix": "<optional prefix>"
 }
 ```

@@ -1,0 +1,9 @@
+providers:
+  docker:
+    # TODO: configuration of domain
+    defaultRule: "Host(`{{ index .Labels \"remotegateway.prefix\" }}.rustic.maxjoehnk.me`)"
+    network: remote_gateway
+    exposedByDefault: false
+api:
+  dashboard: true
+  insecure: true

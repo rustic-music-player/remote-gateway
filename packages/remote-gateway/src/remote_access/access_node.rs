@@ -1,14 +1,15 @@
 use uuid::Uuid;
 use crate::remote_access::api::RegisterNodeRequest;
+use serde::{Serialize, Deserialize};
 
 use rand::seq::IteratorRandom;
 
 const ASCII_CHARS: &str = "0123456789abcdefghijklmnopqrstuvwxyz";
 
-#[derive(Default)]
+#[derive(Default, Serialize, Deserialize)]
 pub struct AccessNode {
     pub id: Uuid,
-    pub public_key: Vec<u8>,
+    pub public_key: String,
     pub prefix: String,
     pub username: String
 }
@@ -27,7 +28,7 @@ impl AccessNode {
     pub fn create(request: &RegisterNodeRequest) -> AccessNode {
         AccessNode {
             id: Uuid::new_v4(),
-            public_key: request.public_key.clone().into_bytes(), //base64::decode(&request.public_key).unwrap(),
+            public_key: request.public_key.clone(),
             prefix: request.preferred_prefix.clone()
                 .unwrap_or_else(|| generate_prefix()),
             username: generate_username()
