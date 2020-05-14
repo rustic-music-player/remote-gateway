@@ -1,5 +1,3 @@
-def images = dockerImages()
-
 node {
     checkout scm
     stage('Build') {
